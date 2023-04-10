@@ -45,7 +45,7 @@ theme_set(
         theme(legend.text = element_text(size = 11),
               legend.spacing = unit(0.001, units = "npc"),
               legend.key.width = unit(0.001, units = "npc"))
-    )
+)
 
 
 
