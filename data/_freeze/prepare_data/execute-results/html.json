@@ -1,0 +1,16 @@
+{
+  "hash": "30c3b5fcb37247a47e0503841e8333da",
+  "result": {
+    "markdown": "---\ntitle: \"Untitled\"\nformat: html\ncode-fold: true\ntitle-block-banner: true\nexecute: \n  warning: false\n  echo: true\n---\n\n::: {.cell}\n\n```{.r .cell-code}\nlibrary(tidyverse)\nlibrary(readxl)\nlibrary(janitor)\nlibrary(visitalaneysluverds)\nlibrary(hagstofa)\n```\n:::\n\n\n\n\n# Efnahagur\n\n\n::: {.cell}\n\n```{.r .cell-code}\nefnahagur <- read_excel(\"net-efnahagsreikningur.xlsx\", skip = 4) |> \n    clean_names() |> \n    fill(ar, sveitarfelag, hluti) |> \n    filter(\n        tegund2 %in% c(\n            \"Veltufjármunir Total\", \n            \"Varanlegir rekstrarfjármunir\", \n            \"Áhættufjármunir og langtímakröfur\",\n            \"Skuldbindingar\", \n            \"Langtímaskuldir\",\n            \"Skammtímaskuldir\", \n            \"Eigið fé\"\n        ) | tegund %in% c(\n            \"Skammtímakröfur á eigin fyrirtæki\",\n            \"Aðrir veltufjármunir\"\n        )\n    ) |> \n    mutate(\n        tegund2 = ifelse(\n            is.na(tegund2), tegund, tegund2) |>\n            str_replace(\" Total\", \"\")\n    ) |> \n    select(-tegund) |> \n    mutate(\n        ar = parse_number(ar),\n        sveitarfelag = str_sub(sveitarfelag, start = 6)\n    )\n```\n:::\n\n\n\n# Rekstur\n\n\n::: {.cell}\n\n```{.r .cell-code}\nrekstur <- read_excel(\"net-rekstrarreikningur.xlsx\", skip = 4) |> \n    clean_names() |> \n    fill(ar, sveitarfelag, hluti) |> \n    filter(\n        tegund2 %in% c(\n            \"Gjöld Total\", \n            \"Tekjur Total\",\n            \"Rekstrarniðurstaða Total\"\n        ) | tegund %in% c(\n            \"Afskriftir\", \n            \"Breyting lífeyrisskuldbindinga\",\n            \"Fjármagnsliðir\",\n            \"Óreglulegir liðir\",\n            \"Framlag Jöfnunarsjóðs\", \n            \"Skatttekjur án Jöfnunarsjóðs\",\n            \"Laun og launatengd gjöld\"\n        )\n    ) |> \n    mutate(tegund2 = ifelse(is.na(tegund2), tegund, tegund2) |> str_replace(\" Total\", \"\")) |> \n    select(-tegund) |> \n    mutate(ar = parse_number(ar),\n           sveitarfelag = str_sub(sveitarfelag, start = 6))\n```\n:::\n\n\n\n\n# Sjóðsstreymi\n\n\n::: {.cell}\n\n```{.r .cell-code}\nsjodsstreymi <- read_excel(\"net-sjodsstreymi.xlsx\", skip = 4) |> \n    clean_names() |> \n    fill(ar, sveitarfelag, hluti, tegund2) |> \n    mutate(\n        ar = parse_number(ar),\n        sveitarfelag = str_sub(sveitarfelag, start = 6)\n    ) |> \n    filter(\n        tegund2 %in% c(\n            \"Veltufé frá rekstri Total\", \n            \"Fjárfestingarhreyfingar Total\") | tegund %in% c(\n                \"Afborganir langtímalána\",\n                \"Aðrar fjármögnunarhreyfingar\",\n                \"Tekin ný langtímalán\"\n            )\n    ) |>\n    mutate(tegund2 = ifelse(is.na(tegund), tegund2, tegund) |> str_replace(\" Total\", \"\")) |> \n    select(-tegund)\n```\n:::\n",
+    "supporting": [
+      "prepare_data_files"
+    ],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}

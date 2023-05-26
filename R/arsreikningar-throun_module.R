@@ -7,7 +7,7 @@ throun_ui <- function(id) {
             selectInput(
                 inputId = NS(id, "sveitarfelag"),
                 label = "Sveitarfélag",
-                choices = unique(d$sveitarfelag),
+                choices = unique(throun_d$sveitarfelag),
                 selected = c("Reykjavíkurborg", "Kópavogsbær", "Hafnarfjarðarkaupstaður",
                              "Garðabær", "Mosfellsbær", "Seltjarnarnesbær"),
                 multiple = TRUE,
@@ -23,26 +23,7 @@ throun_ui <- function(id) {
                 inputId = NS(id, "y_var"),
                 label = "Myndrit",
                 choices = c(
-                    "Árafjöldi til niðurgreiðslu nettó skulda",
-                    "Eiginfjárhlutfall",
-                    "Framlegð sem hlutfall af tekjum",
-                    "Handbært fé per íbúi",
-                    "Jöfnunarsjóðsframlög per íbúi",
-                    "Jöfnunarsjóðsframlög sem hlutfall af skatttekjum",
-                    "Launa- og launatengd gjöld per íbúi",
-                    "Launa- og launatengd gjöld sem hlutfall af útgjöldum",
-                    "Nettó jöfnunarsjóðsframlög per íbúi",
-                    "Nettóskuldir sem hlutfall af tekjum",
-                    "Rekstrarniðurstaða sem hlutfall af tekjum",
-                    "Rekstrarniðurstaða undanfarinna 3 ára  sem hlutfall af tekjum",
-                    "Skuldir",
-                    "Skuldir per íbúi", 
-                    "Skuldir sem hlutfall af tekjum",
-                    "Skuldaaukning",
-                    "Skuldahlutfall",
-                    "Útsvar og fasteignaskattur per íbúi",
-                    "Veltufé frá rekstri sem hlutfall af tekjum",
-                    "Veltufjárhlutfall"
+                    unique(throun_d$name)
                 ),
                 selected = c("Nettóskuldir sem hlutfall af tekjum")
             ),
@@ -119,7 +100,8 @@ throun_server <- function(id) {
                       input$ar_fra, 
                       input$hluti,
                       input$y_var,
-                      input$verdlag) |> 
+                      input$verdlag,
+                      input$visitala) |> 
             bindEvent(input$goButton, ignoreNULL = FALSE)
         
         outputOptions(output, "throun_plot", suspendWhenHidden = FALSE)

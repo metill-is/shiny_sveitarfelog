@@ -1,16 +1,27 @@
 make_throun_df <- function(input) {
     
-    y_var <- ui_name_to_data_name(input$y_var)
     
-    d |> 
-        filter(hluti %in% input$hluti, 
-               sveitarfelag %in% input$sveitarfelag,
-               ar >= input$ar_fra) |> 
-        select(ar, sveitarfelag, y = all_of(y_var), cpi) |> 
-        adjust_for_inflation(input$y_var, input$verdlag, input$ar_fra) |> 
-        mutate(x = ar,
-               tooltip = text_tooltip_throun(sveitarfelag, y, ar, input$y_var),
-               sveitarfelag = str_c(sveitarfelag, ""))
+    throun_d |> 
+        filter(
+            hluti %in% input$hluti, 
+            sveitarfelag %in% input$sveitarfelag,
+            ar >= input$ar_fra,
+            name == input$y_var
+        ) |> 
+        mutate(
+            verdlag = input$verdlag,
+            y = ifelse(
+                (verdlag == "Fast verðlag") & !is_percent,
+                vnv_convert(y, ar),
+                y
+            )
+        ) |> 
+        select(ar, sveitarfelag, y, is_percent) |> 
+        mutate(
+            x = ar,
+            tooltip = text_tooltip_throun(sveitarfelag, y, ar, input$y_var, is_percent),
+            sveitarfelag = str_c(sveitarfelag, "")
+        )
     
 }
 
@@ -46,7 +57,7 @@ make_throun_ggplot <- function(throun_df, input) {
 make_throun_table <- function(throun_df, input) {
     
     table_dat <- throun_df |> 
-        select(-cpi, -x) |> 
+        select(-x) |> 
         select(Ár = ar, sveitarfelag, y) |> 
         mutate(y = round(y, digits = get_digits_yvar(input$y_var))) |> 
         pivot_wider(names_from = sveitarfelag, values_from = y)

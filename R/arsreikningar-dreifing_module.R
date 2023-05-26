@@ -9,7 +9,7 @@ dreifing_ui <- function(id) {
                      selectInput(
                          inputId = NS(id, "vidmid"),
                          label = "Sveitarfélag til viðmiðunar",
-                         choices = unique(d$sveitarfelag),
+                         choices = unique(dreifing_d$sveitarfelag),
                          selected = c("Reykjavíkurborg"),
                          multiple = FALSE,
                          selectize = FALSE
@@ -20,30 +20,19 @@ dreifing_ui <- function(id) {
                          choices = c("A-hluti", "A og B-hluti"),
                          selected = c("A-hluti")
                      ),
-                     
+                     numericInput(
+                         inputId = NS(id, "ar"),
+                         label = "Ár",
+                         value = 2021,
+                         min = 2002, 
+                         max = max(dreifing_d$ar),
+                         step = 1
+                     ),
                      selectInput(
                          inputId = NS(id, "y_var"),
                          label = "Myndrit",
-                         choices = c(
-                             "Eiginfjárhlutfall",
-                             "Handbært fé per íbúi",
-                             "Jöfnunarsjóðsframlög per íbúi",
-                             "Jöfnunarsjóðsframlög sem hlutfall af skatttekjum",
-                             "Launa- og launatengd gjöld per íbúi",
-                             "Launa- og launatengd gjöld sem hlutfall af útgjöldum",
-                             "Nettó jöfnunarsjóðsframlög per íbúi",
-                             "Nettóskuldir sem hlutfall af tekjum",
-                             "Rekstrarniðurstaða per íbúi (kjörtímabil í heild)",
-                             "Rekstrarniðurstaða sem hlutfall af tekjum (kjörtímabil í heild)",
-                             "Skuldir per íbúi", 
-                             "Skuldir sem hlutfall af tekjum",
-                             "Skuldaaukning á kjörtímabili (leiðrétt fyrir verðbólgu)",
-                             "Skuldahlutfall",
-                             "Útsvar og fasteignaskattur per íbúi",
-                             "Veltufé frá rekstri sem hlutfall af tekjum",
-                             "Veltufjárhlutfall"
-                         ),
-                         selected = c("Skuldaaukning á kjörtímabili (leiðrétt fyrir verðbólgu)")
+                         choices = unique(dreifing_d$name),
+                         selected = c("Nettóskuldir sem hlutfall af tekjum")
                      ),
                      div(
                          actionButton(
@@ -96,7 +85,12 @@ dreifing_server <- function(id) {
                 make_dreifing_ggplotly(input)
             
         }) |> 
-            bindCache(input$y_var, input$hluti, input$vidmid) |> 
+            bindCache(
+                input$y_var, 
+                input$hluti, 
+                input$vidmid,
+                input$ar
+                ) |> 
             bindEvent(input$goButton, ignoreNULL = FALSE) 
         
         outputOptions(output, "dreifing_plot", suspendWhenHidden = FALSE)

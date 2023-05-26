@@ -17,10 +17,42 @@ library(bslib)
 library(thematic)
 library(shinycssloaders)
 library(feather)
+library(arrow)
 library(shinyWidgets)
 library(metill)
+library(visitalaneysluverds)
+library(here)
 
 shinyOptions(plot.autocolor = TRUE)
+thematic_on()
+
+
+
+# throun_d <- read_parquet(
+#     "~/Metill/Metill.is/maelabord/sveitarfelog/gogn/throun_data.parquet"
+# )
+# 
+# dreifing_d <- read_parquet(
+#     "~/Metill/Metill.is/maelabord/sveitarfelog/gogn/dreifing_data.parquet"
+# )
+# 
+# vidmid_d <- read_parquet(
+#     "~/Metill/Metill.is/maelabord/sveitarfelog/gogn/vidmid_data.parquet"
+# )
+
+
+throun_d <- read_parquet(
+    here("data", "throun_data.parquet")
+)
+
+dreifing_d <- read_parquet(
+    here("data", "dreifing_data.parquet")
+)
+
+vidmid_d <- read_parquet(
+    here("data", "vidmid_data.parquet")
+)
+
 
 ##### Data #####
 # Ársreikningagögn
@@ -49,21 +81,24 @@ theme_set(
 
 
 
-bs_global_theme(
-    bootswatch = "flatly"
-)
-
-bs_global_add_variables(
+light <- bs_theme(
+    bootswatch = "flatly",
     primary = "#484D6D",
     secondary = "#969696",
     success = "#969696",
-    # danger = "#FF8CC6",
-    # info = "#FF8CC6",
     light = "#faf9f9",
     dark = "#484D6D",
     bg = "#faf9f9",
     fg = "#737373",
     "body-bg" = "#faf9f9",
+    base_font = "Lato",
+    heading_font = "Segoe UI",
+    "navbar-brand-font-family" = "Playfair Display",
+    code_font = "SFMono-Regular"
+)
+
+dark <- bs_theme(
+    bootswatch = "darkly",
     base_font = "Lato",
     heading_font = "Segoe UI",
     "navbar-brand-font-family" = "Playfair Display",
@@ -118,3 +153,14 @@ percent_vars <- c(
     "Veltufé frá rekstri sem hlutfall af tekjum",
     "Veltufjárhlutfall"
 )
+
+
+
+# input <- list(
+#     hluti = "A-hluti",
+#     sveitarfelag = c("Reykjavíkurborg", "Kópavogsbær", "Hafnarfjarðarkaupstaður",
+#                      "Garðabær", "Mosfellsbær", "Seltjarnarnesbær"),
+#     y_var = c("Nettóskuldir sem hlutfall af tekjum"),
+#     ar_fra = 2002,
+#     verdlag = "Fast verðlag"
+# )

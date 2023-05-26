@@ -38,7 +38,7 @@ vidmid_ui <- function(id) {
     
 }
 
-vidmid_server <-function(id) {
+vidmid_server <- function(id) {
     moduleServer(id, function(input, output, session) {
         
         my_plot_vidmid <- reactive({

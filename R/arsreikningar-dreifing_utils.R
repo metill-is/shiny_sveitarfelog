@@ -1,11 +1,12 @@
 make_dreifing_df <- function(input) {
-    y_var <- ui_name_to_data_name(input$y_var)
     
-    d |> 
-        group_by(sveitarfelag) |> 
-        filter(ar == max(ar), hluti == input$hluti) |> 
-        ungroup() |> 
-        select(sveitarfelag, ar, y = all_of(y_var)) |> 
+    dreifing_d |> 
+        filter(
+            ar == input$ar,
+            hluti == input$hluti,
+            name == input$y_var
+        ) |> 
+        select(sveitarfelag, ar, y, is_percent) |> 
         drop_na(y)  
 }
 
@@ -14,10 +15,10 @@ make_dreifing_ggplot <- function(dreifing_df, input) {
     
     plot_dat <- dreifing_df |> 
         mutate(my_colour = 1 * (sveitarfelag %in% input$vidmid) + 2 * (sveitarfelag == "Heild"),
-               text = text_tooltip_throun(sveitarfelag, y, ar, input$y_var),
-               sveitarfelag = case_when(sveitarfelag == input$vidmid ~ str_c("<b style='color:#2171b5'>", sveitarfelag, " (Til ", ar, ")", "</b>"),
-                                        sveitarfelag == "Heild" ~ str_c("<b style='color:#b2182b'>", sveitarfelag, " (Til ", ar, ")", "</b>"),
-                                        TRUE ~ str_c(sveitarfelag, " (", ar, ")")),
+               text = text_tooltip_throun(sveitarfelag, y, ar, input$y_var, is_percent),
+               sveitarfelag = case_when(sveitarfelag == input$vidmid ~ str_c("<b style='color:#2171b5'>", sveitarfelag, "</b>"),
+                                        sveitarfelag == "Heild" ~ str_c("<b style='color:#b2182b'>", sveitarfelag, "</b>"),
+                                        TRUE ~ str_c(sveitarfelag)),
                sveitarfelag = fct_reorder(sveitarfelag, y))
     
     x_scale <- make_x_scale(input$y_var)
@@ -39,7 +40,7 @@ make_dreifing_ggplot <- function(dreifing_df, input) {
         labs(x = NULL,
              y = NULL,
              col = NULL,
-             title = str_c(input$y_var, " (", input$hluti, ")"),
+             title = str_c(input$y_var, " (",input$ar, ", ", input$hluti, ")"),
              subtitle = subtitles,
              caption = caption) +
         coord_cartesian(clip = "off")
@@ -67,10 +68,10 @@ make_dreifing_table <- function(dreifing_df, input) {
     
     
     table_dat <- dreifing_df |> 
-        select(sveitarfelag, ar, y) |> 
+        select(sveitarfelag, ar, y, is_percent) |> 
         arrange(desc(y)) |> 
         mutate(y = round(y, digits = get_digits_yvar(input$y_var)),
-               y = format_number(input$y_var, y),
+               y = format_number(input$y_var, y, is_percent),
                nr = str_c(str_pad(row_number(), width = 2, side = "left", pad = "0"), "/", n())) |> 
         select(nr, sveitarfelag, ar, y) |> 
         rename(Röðun = nr, Sveitarfélag = sveitarfelag, "Síðasti ársreikningur" = ar, !!input$y_var := y)
