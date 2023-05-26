@@ -1,8 +1,3 @@
-text_tooltip_dreifing <- function(sveitarfelag, y) {
-    paste0(
-        sveitarfelag,": ", number(y, big.mark = ".", decimal.mark = ",", accuracy = 0.01)
-    )
-}
 
 text_tooltip_throun <- function(sveitarfelag, y, ar, y_name, is_percent) {
     paste0(
@@ -29,49 +24,6 @@ format_number <- function(y_name, y, is_percent) {
         number(y, big.mark = ".", decimal.mark = ",", accuracy = 1)
     )
 }
-
-
-check_outcome_type <- function(y_name) {
-    
-}
-
-
-ui_name_to_data_name <- function(y_name) {
-    y_vars[[y_name]]
-}
-
-
-adjust_for_inflation <- function(data, y_name, verdlag, ar_fra) {
-    if (y_name %in% c("Skuldir",
-                      "Skuldir á íbúa", 
-                      "Handbært fé á íbúa", 
-                      "Jöfnunarsjóðsframlög á íbúa",
-                      "Launa- og launatengd gjöld á íbúa",
-                      "Nettó jöfnunarsjóðsframlög á íbúa",
-                      "Útsvar og fasteignaskattur á íbúa")) {
-        if (verdlag == "Verðlag hvers árs") {
-            return(data)
-        } else {
-            return(data |> mutate(y = y / cpi))
-        }
-        
-    } else if (y_name %in% c("Skuldaaukning")) {
-        if (verdlag == "Verðlag hvers árs") {
-            return(data |> 
-                       group_by(sveitarfelag) |> 
-                       mutate(y = y / y[ar == ar_fra] - 1) |> 
-                       ungroup())
-        } else {
-            return(data |> 
-                       group_by(sveitarfelag) |> 
-                       mutate(y = (y / cpi) / (y[ar == ar_fra] / cpi[ar == ar_fra]) - 1) |> 
-                       ungroup())
-        }
-    } else {
-        return(data)
-    }
-}
-
 
 make_x_scale <- function(y_name) {
     x_scales <- list(

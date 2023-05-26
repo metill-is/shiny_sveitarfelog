@@ -26,20 +26,8 @@ library(here)
 shinyOptions(plot.autocolor = TRUE)
 thematic_on()
 
-
-
-# throun_d <- read_parquet(
-#     "~/Metill/Metill.is/maelabord/sveitarfelog/gogn/throun_data.parquet"
-# )
-# 
-# dreifing_d <- read_parquet(
-#     "~/Metill/Metill.is/maelabord/sveitarfelog/gogn/dreifing_data.parquet"
-# )
-# 
-# vidmid_d <- read_parquet(
-#     "~/Metill/Metill.is/maelabord/sveitarfelog/gogn/vidmid_data.parquet"
-# )
-
+##### Data #####
+# Ársreikningagögn
 
 throun_d <- read_parquet(
     here("data", "throun_data.parquet")
@@ -52,12 +40,6 @@ dreifing_d <- read_parquet(
 vidmid_d <- read_parquet(
     here("data", "vidmid_data.parquet")
 )
-
-
-##### Data #####
-# Ársreikningagögn
-d <- read_feather("data/arsreikningagogn.feather") 
-
 
 ##### Sidebar Info and Plot Captions #####
 # This is pasted into the sidebar on each page
@@ -104,63 +86,3 @@ dark <- bs_theme(
     "navbar-brand-font-family" = "Playfair Display",
     code_font = "SFMono-Regular"
 )
-
-##### List of all outcome variables #####
-#  To be used by functions in utils.R
-
-y_vars <- list(
-    "Árafjöldi til niðurgreiðslu nettó skulda" = "timi_borga_skuldir",
-    "Eiginfjárhlutfall" = "eiginfjarhlutfall",
-    "Framlegð per íbúi (kjörtímabil í heild)" = "framlegd_per_ibui_kjortimabil",
-    "Framlegð sem hlutfall af tekjum" = "framlegd_hlutf",
-    "Framlegð sem hlutfall af tekjum (kjörtímabil í heild)" = "framlegd_hlutf_kjortimabil",
-    "Handbært fé per íbúi" = "handbaert_fe_per_ibui",
-    "Jöfnunarsjóðsframlög per íbúi" = "jofnunarsjodur_a_ibua",
-    "Jöfnunarsjóðsframlög sem hlutfall af skatttekjum" = "hlutf_jofnunarsjods_skottum",
-    "Launa- og launatengd gjöld per íbúi" = "launagjold_per_ibui",
-    "Launa- og launatengd gjöld sem hlutfall af útgjöldum" = "launagjold_hlutf_gjold",
-    "Nettó jöfnunarsjóðsframlög per íbúi" = "netto_jofnunarsjod_per_ibui",
-    "Nettóskuldir sem hlutfall af tekjum" = "nettoskuldir_hlutf_tekjur",
-    "Rekstrarniðurstaða per íbúi (kjörtímabil í heild)" = "rekstrarnidurstada_per_ibui_kjortimabil",
-    "Rekstrarniðurstaða sem hlutfall af tekjum" = "rekstrarnidurstada_hlutf",
-    "Rekstrarniðurstaða sem hlutfall af tekjum (kjörtímabil í heild)" = "rekstrarnidurstada_hlutf_kjortimabil",
-    "Rekstrarniðurstaða undanfarinna 3 ára  sem hlutfall af tekjum" = "rekstur_3_ar_hlutf_tekjur",
-    "Skuldir" = "heildarskuldir",
-    "Skuldir per íbúi"  = "skuldir_per_ibui",
-    "Skuldir sem hlutfall af tekjum" = "skuldir_hlutf_tekjur",
-    "Skuldaaukning" = "skuldaaukning",
-    "Skuldaaukning á kjörtímabili (leiðrétt fyrir verðbólgu)" = "skuldaaukning_2021",
-    "Skuldahlutfall" = "skuldahlutfall",
-    "Útsvar og fasteignaskattur per íbúi" = "skattur_a_ibua",
-    "Veltufé frá rekstri sem hlutfall af tekjum" = "veltufe_hlutf_tekjur",
-    "Veltufjárhlutfall" = "veltufjarhlutfall"
-)
-
-percent_vars <- c(
-    "Eiginfjárhlutfall",
-    "Framlegð sem hlutfall af tekjum",
-    "Framlegð sem hlutfall af tekjum (kjörtímabil í heild)",
-    "Jöfnunarsjóðsframlög sem hlutfall af skatttekjum",
-    "Launa- og launatengd gjöld sem hlutfall af útgjöldum",
-    "Nettóskuldir sem hlutfall af tekjum",
-    "Rekstrarniðurstaða sem hlutfall af tekjum",
-    "Rekstrarniðurstaða sem hlutfall af tekjum (kjörtímabil í heild)",
-    "Rekstrarniðurstaða undanfarinna 3 ára  sem hlutfall af tekjum",
-    "Skuldir sem hlutfall af tekjum",
-    "Skuldaaukning",
-    "Skuldaaukning á kjörtímabili (leiðrétt fyrir verðbólgu)",
-    "Skuldahlutfall",
-    "Veltufé frá rekstri sem hlutfall af tekjum",
-    "Veltufjárhlutfall"
-)
-
-
-
-# input <- list(
-#     hluti = "A-hluti",
-#     sveitarfelag = c("Reykjavíkurborg", "Kópavogsbær", "Hafnarfjarðarkaupstaður",
-#                      "Garðabær", "Mosfellsbær", "Seltjarnarnesbær"),
-#     y_var = c("Nettóskuldir sem hlutfall af tekjum"),
-#     ar_fra = 2002,
-#     verdlag = "Fast verðlag"
-# )

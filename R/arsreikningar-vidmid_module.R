@@ -6,7 +6,7 @@ vidmid_ui <- function(id) {
             selectInput(
                 inputId = NS(id, "sveitarfelag"),
                 label = "Sveitarfélag",
-                choices = unique(d$sveitarfelag),
+                choices = unique(vidmid_d$sveitarfelag),
                 selected = c("Reykjavíkurborg", "Kópavogsbær", "Hafnarfjarðarkaupstaður",
                              "Garðabær", "Mosfellsbær", "Seltjarnarnesbær"),
                 multiple = TRUE,
