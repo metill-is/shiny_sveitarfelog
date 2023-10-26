@@ -13,7 +13,4 @@ function(input, output, session) {
     vidmid_server("vidmid")
     
     
-    #### HAFÐU SAMBAND #### 
-    hafdusamband_ui("hafdusamband")
-    
 }

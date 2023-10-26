@@ -266,6 +266,7 @@ get_digits_yvar <- function(y_name) {
         "Handbært fé á íbúa" = 0,
         "Jöfnunarsjóðsframlög á íbúa" = 0,
         "Jöfnunarsjóðsframlög sem hlutfall af skatttekjum" = 3,
+        "Langtímaskuldir sem hlutfall af eigin fé" = 3,
         "Launa- og launatengd gjöld á íbúa" = 0,
         "Launa- og launatengd gjöld sem hlutfall af útgjöldum" = 3,
         "Nettó jöfnunarsjóðsframlög á íbúa" = 0,

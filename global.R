@@ -5,7 +5,6 @@ library(tidyverse)
 library(scales)
 library(ggthemes)
 library(kableExtra)
-library(gganimate)
 library(lubridate)
 library(geomtextpath)
 library(ggtext)
@@ -16,12 +15,10 @@ library(DT)
 library(bslib)
 library(thematic)
 library(shinycssloaders)
-library(feather)
 library(arrow)
 library(shinyWidgets)
 library(metill)
 library(visitalaneysluverds)
-library(here)
 
 shinyOptions(plot.autocolor = TRUE)
 thematic_on()
@@ -47,7 +44,7 @@ sidebar_info <- paste0(
     br(" "),
     h5("Höfundur:"),
     p("Brynjólfur Gauti Guðrúnar Jónsson"),
-    HTML("<a href='https://github.com/bgautijonsson/sveitarfelog_maelabord' target='_top'> Kóði og gögn </a><br>")
+    HTML("<a href='https://github.com/metill-is/shiny_sveitarfelog' target='_top'> Kóði og gögn </a><br>")
 )
 # This is the caption for plots
 caption <- ""
@@ -72,17 +69,9 @@ light <- bs_theme(
     dark = "#484D6D",
     bg = "#faf9f9",
     fg = "#737373",
-    "body-bg" = "#faf9f9",
-    base_font = "Lato",
-    heading_font = "Segoe UI",
-    "navbar-brand-font-family" = "Playfair Display",
-    code_font = "SFMono-Regular"
+    "body-bg" = "#faf9f9"
+    # base_font = font_google("Lato"),
+    # heading_font = font_google("Open Sans"),
+    # code_font = font_google("SFMono-Regular")
 )
 
-dark <- bs_theme(
-    bootswatch = "darkly",
-    base_font = "Lato",
-    heading_font = "Segoe UI",
-    "navbar-brand-font-family" = "Playfair Display",
-    code_font = "SFMono-Regular"
-)

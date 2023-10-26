@@ -23,8 +23,8 @@ dreifing_ui <- function(id) {
                      numericInput(
                          inputId = NS(id, "ar"),
                          label = "Ár",
-                         value = 2021,
-                         min = 2002, 
+                         value = 2022,
+                         min = max(dreifing_d$ar), 
                          max = max(dreifing_d$ar),
                          step = 1
                      ),
