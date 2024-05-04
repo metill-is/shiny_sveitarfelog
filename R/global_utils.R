@@ -38,7 +38,7 @@ make_x_scale <- function(y_name) {
         "Launa- og launatengd gjöld sem hlutfall af útgjöldum" = scale_x_continuous(labels = label_percent(), limits = c(0, NA), expand = expansion(mult = 0.01)),
         "Nettó jöfnunarsjóðsframlög á íbúa" = scale_x_continuous(labels = label_number(suffix = " kr")),
         "Nettóskuldir sem hlutfall af tekjum" = scale_x_continuous(labels = label_percent(), limits = c(NA, NA), expand = expansion(mult = 0.01)),
-        "Rekstrarniðurstaða á íbúa (kjörtímabil í heild)" = scale_x_continuous(labels = label_number(suffix = " kr")),
+        "Rekstrarniðurstaða á íbúa" = scale_x_continuous(labels = label_number(suffix = " kr")),
         "Rekstrarniðurstaða undanfarinna 3 ára sem hlutfall af tekjum" = scale_x_continuous(labels = label_percent()),
         "Skuldir á íbúa" = scale_x_continuous(labels = label_number(suffix = " kr")),
         "Skuldir sem hlutfall af tekjum" = scale_x_continuous(labels = label_percent()),
@@ -58,12 +58,21 @@ make_y_scale <- function(y_name) {
         "Árafjöldi til niðurgreiðslu nettó skulda" = scale_y_continuous(
             labels = label_number(suffix = " ár"), 
             limits = c(0, NA), 
-            expand = expansion()
+            expand = expansion(c(0, 0.01))
         ),
         "Eiginfjárhlutfall" = scale_y_continuous(
             labels = label_percent(), 
             breaks = seq(0, 1, by = 0.25), 
-            expand = expansion()
+            expand = expansion(c(0, 0.01))
+        ),
+        "Fjármagnsliðir á íbúa" = scale_y_continuous(
+            labels = function(x) {
+                case_when(
+                    x > 0 ~ isk(x, suffix = " kr (gróði)"),
+                    x < 0 ~ isk(x, suffix = " kr (kostnaður)"),
+                    x == 0 ~ isk(x)
+                )
+            }
         ),
         "Framlegð sem hlutfall af tekjum" = scale_y_continuous(
             labels = label_percent(), 
@@ -71,18 +80,18 @@ make_y_scale <- function(y_name) {
         ),
         "Handbært fé á íbúa" = scale_y_continuous(
             labels = label_number(suffix = " kr"), 
-            expand = expansion(mult = 0.005),
+            expand = expansion(c(0, 0.01)),
             limits = c(NA, NA)
         ),
         "Jöfnunarsjóðsframlög á íbúa" = scale_y_continuous(
             labels = label_number(suffix = " kr"), 
             limits = c(0, NA), 
-            expand = expansion()
+            expand = expansion(c(0, 0.01))
         ),
         "Jöfnunarsjóðsframlög sem hlutfall af skatttekjum" = scale_y_continuous(
             labels = label_percent(), 
             limits = c(0, NA), 
-            expand = expansion()
+            expand = expansion(c(0, 0.01))
         ),
         "Launa- og launatengd gjöld á íbúa" = scale_y_continuous(
             labels = label_number(suffix = " kr"), 
@@ -99,13 +108,16 @@ make_y_scale <- function(y_name) {
         "Nettó jöfnunarsjóðsframlög á íbúa" = scale_y_continuous(
             labels = label_number(suffix = " kr")
         ),
+        "Rekstrarniðurstaða á íbúa" = scale_y_continuous(
+            labels = label_number(suffix = " kr")
+        ),
         "Rekstrarniðurstaða sem hlutfall af tekjum" = scale_y_continuous(
             labels = label_percent(accuracy = 0.1), 
-            expand = expansion()
+            expand = expansion(c(0, 0.01))
         ),
         "Rekstrarniðurstaða undanfarinna 3 ára sem hlutfall af tekjum" = scale_y_continuous(
             labels = label_percent(accuracy = 0.1), 
-            expand = expansion()
+            expand = expansion(c(0, 0.01))
         ),
         "Skuldir" = scale_y_continuous(
             labels = label_number(suffix = " kr"), 
@@ -113,13 +125,10 @@ make_y_scale <- function(y_name) {
         ),
         "Skuldir á íbúa" = scale_y_continuous(
             labels = label_number(suffix = " kr"), 
-            expand = expansion()
+            limits = c(0, NA),
+            expand = expansion(c(0, 0.01))
         ),
         "Skuldir sem hlutfall af tekjum" = scale_y_continuous(
-            labels = label_percent(), 
-            expand = expansion()
-        ),
-        "Skuldaaukning" = scale_y_continuous(
             labels = label_percent(), 
             expand = expansion()
         ),
@@ -127,6 +136,16 @@ make_y_scale <- function(y_name) {
             labels = label_percent(), 
             breaks = seq(0, 1, by = 0.25), 
             expand = expansion()
+        ),
+        "Tekjur á íbúa" = scale_y_continuous(
+            labels = label_number(suffix = " kr"), 
+            limits = c(NA, NA),
+            expand = expansion(c(0, 0.01))
+        ),
+        "Útgjöld á íbúa" = scale_y_continuous(
+            labels = label_number(suffix = " kr"), 
+            limits = c(NA, NA),
+            expand = expansion(c(0, 0.01))
         ),
         "Útsvar og fasteignaskattur á íbúa" =  scale_y_continuous(
             labels = label_number(suffix = " kr"), 
@@ -142,6 +161,10 @@ make_y_scale <- function(y_name) {
         "Veltufjárhlutfall" = scale_y_continuous(
             labels = label_percent(), 
             expand = expansion()
+        ),
+        "Vísitala" = scale_y_continuous(
+            labels = function(x) percent(x), 
+            expand = expansion(mult = 0.05)
         )
     )
     
@@ -173,9 +196,11 @@ make_hlines <- function(y_name) {
     hlines <- list(
         "Árafjöldi til niðurgreiðslu nettó skulda" = 20,
         "Eiginfjárhlutfall" = c(0, 1),
+        "Fjármagnsliðir á íbúa" = 0,
         "Framlegð sem hlutfall af tekjum" = 0,
         "Nettó jöfnunarsjóðsframlög á íbúa" = 0,
         "Nettóskuldir sem hlutfall af tekjum" = 1,
+        "Rekstrarniðurstaða á íbúa" = 0,
         "Rekstrarniðurstaða sem hlutfall af tekjum" = 0,
         "Rekstrarniðurstaða undanfarinna 3 ára sem hlutfall af tekjum" = 0,
         "Skuldir" = 0,
@@ -184,10 +209,11 @@ make_hlines <- function(y_name) {
         "Skuldaaukning" = 0,
         "Skuldahlutfall" = c(0, 1),
         "Veltufé frá rekstri sem hlutfall af tekjum" = 0,
-        "Veltufjárhlutfall" = 1
+        "Veltufjárhlutfall" = 1,
+        "Vísitala" = 0
     )
     
-    if(is.null(hlines[[y_name]])) {
+    if (is.null(hlines[[y_name]])) {
         return(NULL)
     } else {
         geom_hline(yintercept = hlines[[y_name]], lty = 2, alpha = 0.5)
@@ -207,7 +233,7 @@ make_vline_and_segments <- function(y_name) {
         "Launa- og launatengd gjöld sem hlutfall af útgjöldum" = 0,
         "Nettó jöfnunarsjóðsframlög á íbúa" = 0,
         "Nettóskuldir sem hlutfall af tekjum" = 0,
-        "Rekstrarniðurstaða á íbúa (kjörtímabil í heild)" = 0,
+        "Rekstrarniðurstaða á íbúa" = 0,
         "Rekstrarniðurstaða undanfarinna 3 ára sem hlutfall af tekjum" = 0,
         "Skuldir sem hlutfall af tekjum" = 1,
         "Skuldaaukning á kjörtímabili (leiðrétt fyrir verðbólgu)" = 0,
@@ -279,7 +305,8 @@ get_digits_yvar <- function(y_name) {
         "Skuldahlutfall" = 3,
         "Útsvar og fasteignaskattur á íbúa" = 0,
         "Veltufé frá rekstri sem hlutfall af tekjum" = 3,
-        "Veltufjárhlutfall" = 3
+        "Veltufjárhlutfall" = 3,
+        "Vísitala" = 3
     )
     
     if (is.null(my_digits[[y_name]])) my_digits[[y_name]] <- 0

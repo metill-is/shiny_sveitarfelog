@@ -4,6 +4,7 @@ throun_ui <- function(id) {
     sidebarLayout(
         sidebarPanel(
             width = 3,
+            useShinyjs(),
             selectInput(
                 inputId = NS(id, "sveitarfelag"),
                 label = "Sveitarfélag",
@@ -12,6 +13,12 @@ throun_ui <- function(id) {
                              "Garðabær", "Mosfellsbær", "Seltjarnarnesbær"),
                 multiple = TRUE,
                 selectize = TRUE
+            ),
+            materialSwitch(
+                inputId = NS(id, "visitala"),
+                label = "Sýna sem vísitölu?",
+                status = "primary", 
+                value = FALSE
             ),
             selectInput(
                 inputId = NS(id, "hluti"),
@@ -35,11 +42,11 @@ throun_ui <- function(id) {
                 multiple = FALSE, 
                 selectize = FALSE
             ),
-            selectInput(
+            materialSwitch(
                 inputId = NS(id, "verdlag"),
-                label = "Verðlag",
-                choices = c("Verðlag hvers árs", "Fast verðlag"),
-                selected = "Fast verðlag"
+                label = "Léðrétta verðlag?",
+                status = "primary", 
+                value = TRUE
             ),
             div(
                 actionButton(
@@ -75,6 +82,17 @@ throun_ui <- function(id) {
 throun_server <- function(id) {
     moduleServer(id, function(input, output, session) {
         
+        observe({
+            is_percent <- throun_d |> 
+                distinct(name, is_percent) |> 
+                filter(name == input$y_var) |> 
+                pull(is_percent) |> 
+                unique()
+            
+            toggle(id = "visitala", condition = !is_percent)
+            
+            updateMaterialSwitch(session = session, inputId = "visitala", value = FALSE)
+        })
         
         ##### Make the dataframe used in the plot and table ######
         
