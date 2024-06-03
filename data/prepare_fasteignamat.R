@@ -46,7 +46,7 @@ d <- read_excel(
         tegund_eigna == "Íbúðareignir"
     ) |> 
     mutate(
-        haekkun_verd = (fasteignamat_2024 - fasteignamat_2023) / fjoldi
+        haekkun_verd = (fasteignamat_2025 - fasteignamat_2024) / fjoldi
     ) |> 
     select(
         sveitarfelag, haekkun_verd

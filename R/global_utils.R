@@ -108,6 +108,11 @@ make_y_scale <- function(y_name) {
         "Nettó jöfnunarsjóðsframlög á íbúa" = scale_y_continuous(
             labels = label_number(suffix = " kr")
         ),
+        "Ný langtímalán á íbúa" = scale_y_continuous(
+            labels = label_number(suffix = "kr"),
+            limits = c(0, NA),
+            expand = expansion(c(0, 0.01))
+        ),
         "Rekstrarniðurstaða á íbúa" = scale_y_continuous(
             labels = label_number(suffix = " kr")
         ),

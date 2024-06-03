@@ -113,11 +113,12 @@ fasteignagjold_haekkun_server <- function(id) {
             ggplotly(
                 p,
                 tooltip = "text"
-            )
+            ) |> 
+                config(displayModeBar = FALSE)
             
             
         }) |> 
-            bindEvent(input$goButton)
+            bindEvent(input$goButton, ignoreNULL = FALSE)
         
         output$haekkun_plot <- renderPlotly({
             haekkun_plot()
