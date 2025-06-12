@@ -13,10 +13,6 @@ ui <- shinyUI(
       title = "Viðmið",
       vidmid_ui("vidmid")
     ),
-    tabPanel(
-      title = "Fasteignagjöld",
-      fasteignagjold_haekkun_ui("fasteignagjold")
-    ),
     theme = light
   )
 )

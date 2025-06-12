@@ -27,16 +27,16 @@ thematic_on()
 ##### Data #####
 # Ársreikningagögn
 
-throun_d <- read_parquet(
-  here("data", "throun_data.parquet")
+throun_d <- read_csv(
+  "https://raw.githubusercontent.com/bgautijonsson/data_sveitarfelog/refs/heads/master/data/throun_data.csv"
 )
 
-dreifing_d <- read_parquet(
-  here("data", "dreifing_data.parquet")
+dreifing_d <- read_csv(
+  "https://raw.githubusercontent.com/bgautijonsson/data_sveitarfelog/refs/heads/master/data/dreifing_data.csv"
 )
 
-vidmid_d <- read_parquet(
-  here("data", "vidmid_data.parquet")
+vidmid_d <- read_csv(
+  "https://raw.githubusercontent.com/bgautijonsson/data_sveitarfelog/refs/heads/master/data/vidmid_data.csv"
 )
 
 # Fasteignagjöld
